@@ -12,15 +12,13 @@ const Home = () => {
     "https://via.placeholder.com/300x400/DC143C/FFFFFF?text=Image+7",
     "https://via.placeholder.com/300x350/ADFF2F/FFFFFF?text=Image+8",
     "https://via.placeholder.com/300x500/20B2AA/FFFFFF?text=Image+9",
-    "https://via.placeholder.com/300x400/FF7F50/FFFFFF?text=Image+10",
   ];
 
-  // Define breakpoint columns for 4 columns layout
+  // Define breakpoint columns
   const breakpointColumnsObj = {
-    default: 4,  // 4 columns by default
-    1100: 3,     // 3 columns for screens <= 1100px
-    700: 2,      // 2 columns for screens <= 700px
-    500: 1       // 1 column for screens <= 500px
+    default: 3,
+    1100: 2,
+    700: 1,
   };
 
   return (
