@@ -42,9 +42,9 @@ export default function App() {
             <Routes>
               <Route path="/">
                 <Route index element={<Home />} />
-                <Route path="About" element={<About />} />
-                <Route path="Login" element={<Login />} />
-                <Route path="Register" element={<Register />} />
+                <Route path="about" element={<About />} />
+                <Route path="login" element={<Login />} />
+                <Route path="register" element={<Register />} />
               </Route>
             </Routes>
           </div>

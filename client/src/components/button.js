@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const CustomButton = ({ text, color = "black", bg_color = "#01A456", style = 'mr-5' }) => {
+const CustomButton = ({ text, href = "#", color = "black", bg_color = "#01A456", style = 'mr-5' }) => {
 
   console.log("color", color)
   console.log("Sytle ", `${style} py-2 px-4 rounded-full text-black bg-[${bg_color}] text-[${color}] font-bold`)
@@ -10,7 +10,7 @@ const CustomButton = ({ text, color = "black", bg_color = "#01A456", style = 'mr
     <>
       <button
         className={`${style} py-2 px-4 rounded-full text-black font-bold`} style={{ backgroundColor: bg_color, color }}>
-        <a href={"/login"}>{text}</a>
+        <a href={href}>{text}</a>
       </button>
     </>
   )

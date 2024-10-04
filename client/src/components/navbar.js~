@@ -6,7 +6,7 @@ import ProfileCircle from './profileCircle';
 import CustomButton from './button';
 
 const Navbar = ({ toggleSidebar }) => {  // Receive toggleSidebar as a prop
-  const isloggedin = false;
+  const isloggedin = true;
   return (
     <nav className="flex sticky z-40 top-0 items-center justify-between bg-[#FFFFFF] border-b-2 border-black p-[1%]">
       <button className='ml-4' onClick={toggleSidebar}>  {/* Trigger sidebar toggle */}

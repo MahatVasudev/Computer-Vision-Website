@@ -17,8 +17,8 @@ const Navbar = ({ toggleSidebar }) => {  // Receive toggleSidebar as a prop
       {
         isloggedin ?
           (<>
-            <CustomButton text={"SignUp"} bg_color={"#D9D9D9"} style={"mr-2"} />
-            <CustomButton text={"Login"} color={"white"} bg_color={"black"} />
+            <CustomButton text={"SignUp"} href={"/register"} bg_color={"#D9D9D9"} style={"mr-2"} />
+            <CustomButton text={"Login"} href={"/login"} color={"white"} bg_color={"black"} />
           </>) :
           <ProfileCircle />
       }

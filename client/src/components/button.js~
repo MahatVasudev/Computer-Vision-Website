@@ -10,7 +10,7 @@ const CustomButton = ({ text, color = "black", bg_color = "#01A456", style = 'mr
     <>
       <button
         className={`${style} py-2 px-4 rounded-full text-black font-bold`} style={{ backgroundColor: bg_color, color }}>
-        <Link href={"/login"}>{text}</Link>
+        <a href={"/login"}>{text}</a>
       </button>
     </>
   )
