@@ -80,7 +80,7 @@ const Register = () => {
             {/* Username/Email */}
             <div className="mb-5">
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-                Username or Email
+                Email
               </label>
               <input
                 id="username"

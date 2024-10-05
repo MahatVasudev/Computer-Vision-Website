@@ -7,6 +7,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Navbar from './components/navbar';
 import NavBarLeft from './components/navbar_left';
+import CreatorPage from './pages/Creator';
 
 export default function App() {
   const [isOpen, setIsOpen] = useState(false); // Sidebar state
@@ -45,6 +46,7 @@ export default function App() {
                 <Route path="about" element={<About />} />
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
+                <Route path=":creator" element={<CreatorPage />} />
               </Route>
             </Routes>
           </div>
