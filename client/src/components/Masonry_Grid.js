@@ -22,7 +22,7 @@ const MasonryGrid = ({ data }) => {
     >
       {data.map((src, index) => (
         <div key={index} className="mb-4">
-          <a href={`/post/${index + 1}`}>
+          <a href={`/post/${index + 1}?poster="${src}"`}>
             <img src={src} alt={`Image ${index + 1}`} className="w-full h-auto rounded-lg shadow-md" />
           </a>
         </div>

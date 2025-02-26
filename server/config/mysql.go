@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// Deprecated: Use PQBConfig Instead
 type MysqlConfig struct {
 	DBUser     string
 	DBPassword string
@@ -15,8 +16,10 @@ type MysqlConfig struct {
 	DBAddress  string
 }
 
+// Deprecated: Using PostGres
 var MysqlEnvs = mysqlinitConfig()
 
+// Deprecated: Using PostGres
 func mysqlinitConfig() MysqlConfig {
 	var err = godotenv.Load()
 	if err != nil {

@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/joho/godotenv"
@@ -24,4 +25,8 @@ func initCentralConfig() CentralConfig {
 		PublicHost: getEnv("Public_Host", "http://localhost"),
 	}
 
+}
+
+func initDataBaseConfig() string {
+	return fmt.Sprintf("")
 }

@@ -1,8 +1,23 @@
-CREATE TABLE USER(
+CREATE TABLE IF NOT EXISTS users(
   id VARCHAR(255) PRIMARY KEY,
   username VARCHAR(100) UNIQUE NOT NULL,
   first_name VARCHAR(100) NOT NULL,
   last_name VARCHAR(100),
   email VARCHAR(100) UNIQUE NOT NULL,
-  password TEXT NOT NULL
-)
+  password TEXT NOT NULL,
+  createdat TIMESTAMP default CURRENT_TIMESTAMP,
+  updatedat TIMESTAMP default CURRENT_TIMESTAMP
+);
+
+CREATE OR REPLACE FUNCTION update_updated_at() 
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updatedat = current_timestamp;
+  return NEW;
+
+END;
+$$ LANGUAGE PLPGSQL;
+
+
+CREATE OR REPLACE TRIGGER update_updatedat 
+BEFORE UPDATE ON users FOR EACH ROW EXECUTE FUNCTION update_updated_at();

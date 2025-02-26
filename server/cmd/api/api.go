@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/MahatVasudev/Computer-Vision-Website/server/service/user"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/redis/go-redis/v9"
@@ -33,6 +34,9 @@ func (newapiserver *APIServer) Run() error {
 	fs := http.StripPrefix("/public/", http.FileServer(http.Dir("../public")))
 	router.Handle("/public/*", fs)
 
+	userStore := user.NewStore(newapiserver.sqlDB, newapiserver.redDB)
+	userHandler := user.NewHandler(userStore)
+	userHandler.RegisterRoutes(`/user/`, router)
 	server := &http.Server{
 		Addr:    newapiserver.Addr,
 		Handler: router,

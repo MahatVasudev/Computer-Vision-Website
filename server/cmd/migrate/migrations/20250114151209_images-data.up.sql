@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS images (
+  id SERIAL PRIMARY KEY,
+  location VARCHAR(255) UNIQUE
+);
+
+
