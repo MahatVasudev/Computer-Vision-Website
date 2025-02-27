@@ -1,0 +1,3 @@
+ALTER TABLE images
+ADD COLUMN IF NOT EXISTS post_id VARCHAR(100),
+ADD CONSTRAINT fk_post_id FOREIGN KEY (post_id) REFERENCES posts(id);
