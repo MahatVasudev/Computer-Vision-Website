@@ -15,6 +15,7 @@ import store, { persistedStore } from './store';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { useVerifyQuery } from './features/user/auth';
 import { delCreds, setCreds } from './features/user/auth.local';
+import SetupProfile from './pages/SetupProfile';
 
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,10 +55,12 @@ export default function App() {
                   <Route path="/">
                     <Route index element={<Home />} />
                     <Route path="about" element={<About />} />
+                    <Route path="setup" element={<SetupProfile />} />
                     <Route path="login" element={<Login />} />
                     <Route path="register" element={<Register />} />
-                    <Route path="u/:creator" element={<CreatorPage />} />
                     <Route element={<AuthCheck />}>
+
+                      <Route path="u/:creator" element={<CreatorPage />} />
                       <Route path="/post/:post_id/" element={<Post />} />
                       <Route path="/:image_id/edit" element={<EditImage />} />
                     </Route>

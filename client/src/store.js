@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage";
 import { ApiPost, ApiUser } from "./api/newapi";
 import settingsLocal from "./features/settings/settings.local";
 import authLocal from "./features/user/auth.local";
+import authMiddleware from "./middlewares/auth.middleware";
 
 const persistConfig = {
   key: "root",
@@ -28,7 +29,7 @@ const store = configureStore({
     serializableCheck: {
       ignoreActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
     }
-  }).concat(ApiUser.middleware, ApiPost.middleware)
+  }).concat([ApiUser.middleware, ApiPost.middleware, authMiddleware])
 })
 
 
