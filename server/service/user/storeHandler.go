@@ -123,6 +123,20 @@ func (s *Store) GetAllUsers(ctx context.Context) ([]typestore.User, error) {
 
 }
 
+// UpdateUserByID implements store.UserStore.
+func (s *Store) UpdateUserByID(ctx context.Context, user typestore.User) error {
+	panic("unimplemented")
+}
+
+// UpdateUserDetailsByID implements store.UserStore.
+func (s *Store) UpdateUserDetailsByID(
+	ctx context.Context,
+	id string,
+	user_details typestore.UserDetails,
+) error {
+	panic("unimplemented")
+}
+
 func (s *Store) GetUserByUserName(ctx context.Context, username string) (*typestore.User, error) {
 	query := `
   SELECT id, username, first_name, last_name, email, password, createdat, updatedat

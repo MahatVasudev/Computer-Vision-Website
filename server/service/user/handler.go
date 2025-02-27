@@ -67,6 +67,62 @@ func (h *Handler) handleUserNameDetails(w http.ResponseWriter, r *http.Request) 
 
 }
 
+func (h *Handler) handleSetup(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func (h *Handler) SeeUsernameExists(w http.ResponseWriter, r *http.Request) {
+
+	ctx, cancel := context.WithTimeout(context.TODO(), time.Second*6)
+
+	defer cancel()
+
+	var payload temp_username
+
+	if err := utils.ParseJson(r, &payload); err != nil {
+		writer.WriteBadRequest(w, err)
+		return
+	}
+
+	if _, err := h.store.GetUserByUserName(ctx, payload.Username); err != nil {
+		if err == msg.ErrorNotFound {
+			writer.WriteNotFound(w, err)
+			return
+		}
+
+		writer.WriteServerError(w, err)
+		return
+	}
+
+	writer.WriteOk(w, "User Found")
+}
+
+func (h *Handler) SeeEmailExists(w http.ResponseWriter, r *http.Request) {
+
+	ctx, cancel := context.WithTimeout(context.TODO(), time.Second*6)
+
+	defer cancel()
+
+	var payload temp_email
+
+	if err := utils.ParseJson(r, &payload); err != nil {
+		writer.WriteBadRequest(w, err)
+		return
+	}
+
+	if _, err := h.store.GetUserByEmail(ctx, payload.Email); err != nil {
+		if err == msg.ErrorNotFound {
+			writer.WriteNotFound(w, err)
+			return
+		}
+
+		writer.WriteServerError(w, err)
+		return
+	}
+
+	writer.WriteOk(w, "User Found")
+}
+
 func (h *Handler) handleVerifyOTP(w http.ResponseWriter, r *http.Request) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
