@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/MahatVasudev/Computer-Vision-Website/server/config"
@@ -23,25 +24,23 @@ import (
 
 // read user key if exist
 func (s *Store) ReadUserKey(ctx context.Context, key string) (*typestore.Redis_UserSession, error) {
-	encryptedText := s.RedDb.Get(ctx, msg.UserSessionKeys(key))
-
-	if encryptedText.Val() == "" {
-		return nil, fmt.Errorf("data not found")
-	}
-
-	decryptedText, err := utils.Decrypt(encryptedText.Val(), config.SecretEnvs.UserEncrypt)
-
-	if err != nil {
-		return nil, err
-	}
 
 	var payload typestore.Redis_UserSession
 
-	if err := utils.MapToStruct(decryptedText, &payload); err != nil {
+	err := utils.ReadEncryptedRedisDataToAStruct(ctx,
+		msg.UserSessionKeys(key),
+		&payload,
+		config.SecretEnvs.UserEncrypt, s.RedDb)
+
+	if err != nil {
+
 		return nil, err
 	}
 
+	log.Println(payload)
+
 	return &payload, nil
+
 }
 
 func (s *Store) DeleteOTPKey(ctx context.Context, key string) error {

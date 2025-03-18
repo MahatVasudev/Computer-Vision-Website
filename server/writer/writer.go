@@ -22,6 +22,14 @@ func WriteNotFound(writer http.ResponseWriter, err error) {
 	WriteError(writer, http.StatusNotFound, err)
 }
 
+func WriteReqTimeOut(writer http.ResponseWriter, err error) {
+	WriteError(writer, http.StatusRequestTimeout, err)
+}
+
+func WriteConflict(writer http.ResponseWriter, err error) {
+	WriteError(writer, http.StatusConflict, err)
+}
+
 func WriteOk(w http.ResponseWriter, value any) {
 	WriteJSON(w, http.StatusOK, response_success.DataMessage(value))
 }

@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -51,7 +52,7 @@ func (h *Handler) GetSessionData(
 	}
 
 	session_data, err := h.store.ReadUserKey(ctx, ssid.Value)
-
+	log.Println(session_data)
 	if err != nil {
 		return nil, fmt.Errorf("Not Authorized")
 	}

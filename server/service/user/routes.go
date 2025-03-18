@@ -7,12 +7,23 @@ import (
 )
 
 type Handler struct {
-	store store.UserStore
+	store        store.UserStore
+	followStore  store.FollowStore
+	postStore    store.PostStore
+	commentStore store.CommentStore
 }
 
-func NewHandler(store store.UserStore) *Handler {
+func NewHandler(
+	store store.UserStore,
+	followStore store.FollowStore,
+	postStore store.PostStore,
+	commentStore store.CommentStore,
+) *Handler {
 	return &Handler{
-		store: store,
+		store:        store,
+		followStore:  followStore,
+		postStore:    postStore,
+		commentStore: commentStore,
 	}
 }
 
@@ -27,8 +38,12 @@ func (h *Handler) RegisterRoutes(addr string, router *chi.Mux) {
 		router.With(middleware.AuthMiddleWareUser).Get("/auth/verify", h.handleVerifyLogin)
 		router.Post("/auth/verification/send", h.handleVerifyEmail)
 		router.Post("/auth/verification/verify", h.handleVerifyOTP)
+		router.Post("/auth/setup", h.handleSetup)
+		router.Get("/details/un/{username}/posts", h.handleUsersPosts)
 		// single user details operation
-		router.Get("/details/un/{username}", h.handleUserNameDetails)
+		router.With(middleware.AuthMiddleWareUser).
+			Get("/details/un/{username}", h.handleUserNameDetails)
+		router.Get("/check/un/", h.SeeUsernameExists)
 		router.Post("/details/un/{username}", nil)
 		router.Patch("/details/un/{username}", nil)
 		router.Delete("/details/un/{username}", nil)

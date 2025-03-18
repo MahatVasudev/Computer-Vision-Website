@@ -22,7 +22,11 @@ type UserStore interface {
 
 	UpdateUserByID(ctx context.Context, user typestore.User) error
 
-	UpdateUserDetailsByID(ctx context.Context, id string, user_details typestore.UserDetails) error
+	UpdateORCreateUserDetailsByID(
+		ctx context.Context,
+		id string,
+		user_details typestore.UserDetails,
+	) error
 
 	// Redis Queries
 

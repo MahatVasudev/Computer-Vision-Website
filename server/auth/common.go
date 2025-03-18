@@ -31,7 +31,7 @@ func (es *EMAILSENDER) SendOTP(email string, otp int) error {
 	to_message := fmt.Sprintf("To: %s\r\n", to)
 
 	subject_message := "Subject: OTP VERIFY\n"
-	headers := "MIME version: 1.0;\nContent-Type: text/html;\ncharset: \"UTF-8\"\n\n"
+	headers := "MIME version: 1.0;\nContent-Type: text/html;\ncharset:\"UTF-8\"\n\n"
 
 	body_message := fmt.Sprintf(`
   <html>

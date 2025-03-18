@@ -3,12 +3,12 @@ package typestore
 import "time"
 
 type Post struct {
-	ID          string    `json:"post_id"    validate:"required"`
-	Title       string    `json:"post_title" validate:"required"`
-	Description string    `json:"post_desc"  validate:"required"`
-	UserID      string    `json:"user_id"    validate:"required"`
-	CreatedAt   time.Time `json:"createdAt"  validate:"required"`
-	UpdatedAt   time.Time `json:"updatedAt"  validate:"required"`
+	ID        string    `json:"post_id"        validate:"required"`
+	Title     string    `json:"post_title"     validate:"required"`
+	Location  string    `json:"image_location" validate:"required"`
+	Username  string    `json:"username"       validate:"required"`
+	CreatedAt time.Time `json:"createdAt"      validate:"required"`
+	UpdatedAt time.Time `json:"updatedAt"      validate:"required"`
 }
 
 type Image struct {
@@ -23,7 +23,7 @@ type PostFullPicture struct {
 	Description string    `json:"post_desc"  validate:"required"`
 	UserID      string    `json:"user_id"    validate:"required"`
 	UserName    string    `json:"username"   validate:"required"`
-	Images      []string  `json:"assets"     validate:"required"`
+	Images      string    `json:"images"     validate:"required"`
 	CreatedAt   time.Time `json:"createdAt"  validate:"required"`
 	UpdatedAt   time.Time `json:"updatedAt"  validate:"required"`
 }

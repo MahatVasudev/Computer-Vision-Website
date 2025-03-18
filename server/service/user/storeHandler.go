@@ -3,9 +3,11 @@ package user
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/MahatVasudev/Computer-Vision-Website/server/msg"
 	"github.com/MahatVasudev/Computer-Vision-Website/server/typestore"
+	"github.com/lib/pq"
 )
 
 func (s *Store) GetUserByEmail(ctx context.Context, email string) (*typestore.User, error) {
@@ -125,16 +127,69 @@ func (s *Store) GetAllUsers(ctx context.Context) ([]typestore.User, error) {
 
 // UpdateUserByID implements store.UserStore.
 func (s *Store) UpdateUserByID(ctx context.Context, user typestore.User) error {
-	panic("unimplemented")
+
+	query := `
+    UPDATE users SET
+      username = COALESCE(NULLIF($2, ''), users.username),
+      first_name = COALESCE(NULLIF($3, ''), users.first_name),
+      last_name = COALESCE(NULLIF($4, '*'), users.last_name),
+      email = COALESCE(NULLIF($5, ''), users.email),
+      password = COALESCE(NULLIF($6, ''), users.password)
+    WHERE id = $1
+  `
+
+	_, err := s.db.ExecContext(ctx, query,
+		user.ID,
+		user.Username,
+		user.FirstName,
+		user.LastName,
+		user.Email,
+		user.Password,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+
 }
 
 // UpdateUserDetailsByID implements store.UserStore.
-func (s *Store) UpdateUserDetailsByID(
+func (s *Store) UpdateORCreateUserDetailsByID(
 	ctx context.Context,
 	id string,
 	user_details typestore.UserDetails,
 ) error {
-	panic("unimplemented")
+
+	query := `
+    INSERT INTO user_details (userid, avatar, cover_photo, prefered_color, dark_mode, gender, birth_year)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    ON CONFLICT (userid) DO UPDATE
+    SET 
+    avatar = COALESCE(NULLIF(EXCLUDED.avatar, ''), user_details.avatar),
+    cover_photo = COALESCE(NULLIF(EXCLUDED.cover_photo, ''), user_details.cover_photo),
+    prefered_color = COALESCE(NULLIF(EXCLUDED.prefered_color, '*'), user_details.prefered_color),
+    dark_mode = COALESCE(EXCLUDED.dark_mode, user_details.dark_mode),
+    gender = COALESCE(NULLIF(EXCLUDED.gender, ''), user_details.gender),
+    birth_year = COALESCE(NULLIF(EXCLUDED.birth_year, 0), user_details.birth_year);
+  `
+
+	_, err := s.db.ExecContext(ctx, query,
+		id,
+		user_details.Avatar,
+		user_details.CoverPhoto,
+		user_details.PreferedColor,
+		user_details.DarkMode,
+		user_details.Gender,
+		user_details.BirthYear,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (s *Store) GetUserByUserName(ctx context.Context, username string) (*typestore.User, error) {
@@ -147,6 +202,7 @@ func (s *Store) GetUserByUserName(ctx context.Context, username string) (*typest
 	rows, err := s.db.QueryContext(ctx, query, username)
 
 	if err != nil {
+
 		return nil, err
 	}
 
@@ -154,6 +210,7 @@ func (s *Store) GetUserByUserName(ctx context.Context, username string) (*typest
 
 	users := new(typestore.User)
 	for rows.Next() {
+
 		if err := rows.Scan(
 			&users.ID,
 			&users.Username,
@@ -163,6 +220,10 @@ func (s *Store) GetUserByUserName(ctx context.Context, username string) (*typest
 			&users.Password,
 			&users.CreatedAt,
 			&users.UpdatedAt); err != nil {
+
+			if errType, ok := err.(*pq.Error); ok {
+				log.Println(errType)
+			}
 			return nil, err
 		}
 	}
