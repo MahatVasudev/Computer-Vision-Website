@@ -1,6 +1,6 @@
 # converting color formats
 import numpy as np
-
+import torch
 
 def convertRGBtoYCrCb(arr):
     xform = np.array([[0.299, 0.587, 0.114], [-.1687, -.3313, .5], [.5, -.4187, -.0813]])
@@ -24,6 +24,9 @@ def convertRGBtoGrayYCrCb(arr):
     ret[:,:] = ycc[:,:,0]
     return ret
 
+def convertScalesto255(arr):
+        image = (arr + 1) * 127.5
+        return np.clip(image,0,255).astype(np.uint8)
 def convertYCCtoGrayRGB(arr):
     ret = np.zeros_like(arr)
     ret[:, :, 0] = arr[:, :, 0]
