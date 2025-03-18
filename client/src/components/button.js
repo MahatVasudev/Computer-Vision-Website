@@ -1,15 +1,18 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-const CustomButton = ({ text, href = "#", color = "black", bg_color = "#01A456", style = 'mr-5' }) => {
+const CustomButton = ({ text, href = "#", color = "black", bg_color = "#01A456", className = 'mr-5', onClick }) => {
 
-  console.log("color", color)
-  console.log("Sytle ", `${style} py-2 px-4 rounded-full text-black bg-[${bg_color}] text-[${color}] font-bold`)
-  console.log("bg_color", bg_color)
+
+  const preferedColor = useSelector((state) => state.settings.prefered_color)
+
+  bg_color = bg_color === "self" ? preferedColor : bg_color
+
   return (
     <>
-      <button
-        className={`${style} py-2 px-4 rounded-full text-black font-bold`} style={{ backgroundColor: bg_color, color }}>
+      <button onClick={onClick || null}
+        className={`${className} py-2 px-4 rounded-full text-black font-bold`} style={{ backgroundColor: bg_color, color }}>
         <a href={href}>{text}</a>
       </button>
     </>

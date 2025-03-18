@@ -1,9 +1,9 @@
 import React from "react";
 import { ArrowLeft } from "lucide-react";
 
-const CenteredContainer = ({ children, prev_fn, next_fn }) => {
+const CenteredContainer = ({ children, prev_fn, next_fn, finish_fn, step, final_step }) => {
   return (
-    <div className="flex flex-col items-center justify-center h-screen/50 bg-white p-4">
+    <div className="flex flex-col items-center justify-center h-screen/50 bg-transparent p-4">
       {/* Title */}
       <h1 className="text-3xl font-bold mb-4 text-center">
         Tell us more about yourself
@@ -16,17 +16,36 @@ const CenteredContainer = ({ children, prev_fn, next_fn }) => {
           <ArrowLeft size={20} color="black" />
         </button>
 
+        <p className="absolute top-4 right-4 rounded-full p-2" >
+          {`${step}/${final_step}`}
+        </p>
         {/* Dynamic Content */}
         <div className="flex flex-col p-5 mt-5 mb-auto justify-center overflow-auto">{children}</div>
 
         {/* Next Button */}
-        <button
-          onClick={next_fn}
-          className="absolute bottom-4 right-4 bg-blue-500 text-white font-bold rounded-full px-4 py-2">
-          Next
-        </button>
-      </div>
-    </div>
+        {step === final_step ? (
+
+          <>
+            <button
+              onClick={finish_fn}
+              className="absolute bottom-4 right-4 bg-blue-500 text-white font-bold rounded-full px-4 py-2">
+              Done
+            </button>
+
+          </>
+        ) : (
+          <>
+            <button
+              onClick={next_fn}
+              className="absolute bottom-4 right-4 bg-blue-500 text-white font-bold rounded-full px-4 py-2">
+              Next
+            </button>
+
+          </>
+        )
+        }
+      </div >
+    </div >
   );
 };
 

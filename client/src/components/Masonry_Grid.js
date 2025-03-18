@@ -2,6 +2,7 @@
 import React from 'react';
 
 import Masonry from "react-masonry-css";
+import { getPosts } from '../utils/common';
 
 
 const MasonryGrid = ({ data }) => {
@@ -13,6 +14,12 @@ const MasonryGrid = ({ data }) => {
     700: 2,      // 2 columns for screens <= 700px
   };
 
+  if (data == null || data.length == 0) {
+    return (
+      <h1 className='dark:text-white text-black'>No Posts Made yet!!</h1>
+    )
+  }
+
   return (
 
     <Masonry
@@ -20,10 +27,10 @@ const MasonryGrid = ({ data }) => {
       className="my-masonry-grid"
       columnClassName="my-masonry-grid_column"
     >
-      {data.map((src, index) => (
+      {data.map((d, index) => (
         <div key={index} className="mb-4">
-          <a href={`/post/${index + 1}?poster="${src}"`}>
-            <img src={src} alt={`Image ${index + 1}`} className="w-full h-auto rounded-lg shadow-md" />
+          <a href={`/post/${d.post_id}`}>
+            <img src={getPosts(d.image_location)} alt={`Image ${index + 1}`} className="w-full h-auto rounded-lg shadow-md" />
           </a>
         </div>
       ))}

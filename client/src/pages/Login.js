@@ -39,15 +39,9 @@ const Login = () => {
     const username = document.getElementById("username")?.value
     const password = document.getElementById("password")?.value
 
-    console.log(username, password)
-    // Check whether it is a username or email
-    //
 
-    let sttus = "username"
 
-    if (username.includes("@gmail.com")) {
-      sttus = "email"
-    }
+    let sttus = "email"
 
     try {
       const userlog = await login({
@@ -70,7 +64,6 @@ const Login = () => {
 
   return (
     <div className="relative h-screen w-full flex lg:flex-row flex-col-reverse lg:overflow-hidden md:overflow-hidden">
-      {/* Half Image Section (Visible on large screens) */}
       <div className="w-full lg:w-1/2 hidden lg:block relative">
         <img
           src="/login_page.png"
@@ -80,7 +73,6 @@ const Login = () => {
         />
       </div>
 
-      {/* Image as Background on Small Screens */}
       <div
         className="block lg:hidden absolute top-0 left-0 w-full h-full bg-cover bg-center"
         style={{ backgroundImage: `url('/login_page.png')`, backgroundSize: 'contain' }}
@@ -125,14 +117,12 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Forgot Password Link */}
           <div className="text-right mb-5">
             <a href="#" className="text-sm text-blue-500 hover:underline">
               Forgot Password?
             </a>
           </div>
 
-          {/* Sign In Button */}
           <button
             className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg transition duration-200"
             onClick={handleLoginUser}
@@ -140,7 +130,6 @@ const Login = () => {
             Sign In!
           </button>
 
-          {/* Create Account Link */}
           <p className="mt-5 text-center text-gray-500">
             Do not have an Account?{" "}
             <a href="/register" className="text-blue-500 hover:underline">

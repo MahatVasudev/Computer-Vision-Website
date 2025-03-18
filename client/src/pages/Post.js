@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ImageWithModal from '../components/ImageWithModal';
 import PostInfo from '../components/PostInfo';
 import PostStats from '../components/PostStats';
@@ -7,6 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import MasonryGrid from '../components/Masonry_Grid';
 import { useParams, useSearchParams } from 'react-router-dom';
+import { Pen } from 'lucide-react';
+import { useGetPostDetailsMutation } from '../features/post/posts';
+import { getPosts } from '../utils/common';
 
 const Post = () => {
   const images = [
@@ -21,33 +24,66 @@ const Post = () => {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCMQrAsyMardvp4iH8tqoypTJJHtZ9e5jfVg&s",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfwEyltdnZT7_9BDyPtgUW8aXhdq5R3AkRqw&s",
   ];
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+  const [user_id, setUserId] = useState("")
+  const [username, setUsername] = useState("")
+  const [createdat, setCreatedat] = useState("")
   const [isPostLiked, setIsPostLiked] = useState(false);
   const [isPostBookmarked, setIsPostBookmarked] = useState(false);
+  const [image, setImages] = useState("")
+  const [getdetails, { isLoading }] = useGetPostDetailsMutation()
 
-  const post = new URLSearchParams(window.location.search)
-  console.log(post.get("poster"))
   const togglePostLike = () => {
     setIsPostLiked(!isPostLiked);
   };
-  const param = useParams()
+
+  const { post_id } = useParams()
   const togglePostBookmark = () => {
     setIsPostBookmarked(!isPostBookmarked);
   };
 
-  const postInfo = {
-    creator: {
-      username: 'creator',
-      avatarUrl: '/user_default.jpg'
-    },
-    imageUrl: "http://localhost:5000/public/user/avatar/user.jpg",
-    shortDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    fullDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras facilisis neque orci, et cursus lectus bibendum sed. Nam eget vehicula magna. Suspendisse potenti. Fusce volutpat sapien non est sodales tempus. Etiam vestibulum sapien eget eros blandit feugiat. Integer vel fringilla quam."
-  };
 
+
+  const GetPostDetails = async () => {
+    try {
+      const res = await getdetails(post_id)
+
+      if (res.error) {
+        console.log(res.error.data)
+        return
+      }
+
+      setTitle(res.data.data.post_data.post_title)
+      setDescription(res.data.data.post_data.post_desc)
+      setUserId(res.data.data.post_data.user_id)
+      setUsername(res.data.data.post_data.username)
+      setCreatedat(res.data.data.post_data.createdat)
+      setImages(res.data.data.post_data.images)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  useEffect(() => {
+    GetPostDetails()
+  }, [])
+
+  if (isLoading) {
+    return (
+      <>
+        Loading
+
+      </>
+    )
+  }
   return (
     <>
-      <div className="flex w-full h-fit mt-[-1rem] overflow-hidden pt-4 pb-3 px-8 bg-gray-100">
-        <ImageWithModal imageUrl={post.get("poster")} />
+      <div className="flex w-full h-fit mt-[-1rem] overflow-hidden justify-center pt-4 pb-3 px-8 bg-transparent">
+
+        <ImageWithModal
+          imageUrl={getPosts(image)}
+        />
 
         {/* Post details section */}
         <div className="w-1/3 ml-8 h-[44rem] bg-white shadow-lg rounded-lg p-6 flex flex-col overflow-hidden">
@@ -55,9 +91,10 @@ const Post = () => {
           {/* Post info and comments grow to fill available space */}
           <div className="flex-grow">
             <PostInfo
-              creator={postInfo.creator}
-              shortDescription={postInfo.shortDescription}
-              fullDescription={postInfo.fullDescription}
+              creator={username}
+              shortDescription={description}
+              fullDescription={description}
+              title={title}
             />
 
             {/* Comments section */}
@@ -71,7 +108,7 @@ const Post = () => {
               isPostBookmarked={isPostBookmarked}
               toggleLike={togglePostLike}
               toggleBookmark={togglePostBookmark}
-              imageUrl={postInfo.imageUrl}
+              imageUrl={getPosts(image)}
             />
 
             <p className="text-sm text-gray-500 mb-2">October 23rd 2004</p>
@@ -91,7 +128,7 @@ const Post = () => {
         </div>
       </div>
 
-      <div className='text-3xl pt-3 mb-10 font-bold text-black'>Recommended Images {String(post.get("poster"))}</div>
+      <div className='text-3xl pt-3 mb-10 font-bold text-black'>Recommended Images</div>
 
       <MasonryGrid data={images} />
     </>

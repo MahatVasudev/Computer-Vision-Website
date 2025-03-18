@@ -1,13 +1,15 @@
 
 import React from 'react';
 
-const Slider = () => {
+const Slider = ({ value, onValueChange, min, max }) => {
   return (
     <input
       type="range"
       className="w-full"
-      min="0"
-      max="100"
+      min={min}
+      max={max}
+      value={value}
+      onChange={onValueChange}
     />
   );
 };

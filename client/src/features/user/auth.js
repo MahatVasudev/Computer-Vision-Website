@@ -29,6 +29,13 @@ const authApiSlice = ApiUser.injectEndpoints({
         body: body
       })
     }),
+    setup: builder.mutation({
+      query: (body) => ({
+        url: "/auth/setup",
+        method: "POST",
+        body: body
+      })
+    }),
     register: builder.mutation({
       query: (body) => ({
         url: "/create",
@@ -39,4 +46,11 @@ const authApiSlice = ApiUser.injectEndpoints({
   })
 })
 
-export const { useLoginMutation, useRegisterMutation, useVerifyQuery, useSendEmailMutation, useVerifyOTPMutation } = authApiSlice
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useVerifyQuery,
+  useSendEmailMutation,
+  useVerifyOTPMutation,
+  useSetupMutation
+} = authApiSlice

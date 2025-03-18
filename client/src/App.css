@@ -1,12 +1,16 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
 
 .my-masonry-grid {
   display: flex;
-  margin-left: -30px; /* Adjust as needed */
+  margin-left: -30px;
+  /* Adjust as needed */
   width: auto;
 }
 
 .my-masonry-grid_column {
-  padding-left: 30px; /* Adjust as needed */
+  padding-left: 30px;
+  /* Adjust as needed */
   background-clip: padding-box;
 }
-

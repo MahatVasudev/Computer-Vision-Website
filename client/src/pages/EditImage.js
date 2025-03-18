@@ -1,68 +1,153 @@
-import React, { useState } from 'react';
-import ToggleOptionButton from '../components/ToggleOptionButton';
-import ImageEnhancerButton from '../components/ImageEnhancerButton';
-import { faAdjust, faSlidersH, faSun, faTint } from '@fortawesome/free-solid-svg-icons';
+import { useLocation, useNavigate } from "react-router-dom";
+import { useRef, useState, useEffect } from "react";
+import Button from "../components/button";
+
+const filterOptions = [
+  { name: "Brightness", key: "brightness", min: 0, max: 200, default: 100 },
+  { name: "Contrast", key: "contrast", min: 0, max: 200, default: 100 },
+  { name: "Saturation", key: "saturation", min: 0, max: 200, default: 100 },
+];
 
 const EditImage = () => {
-  const Image_Enhancer = [
-    { title: 'Brightness', icon: faSun },
-    { title: 'Contrast', icon: faAdjust },
-    { title: 'Saturation', icon: faTint },
-    { title: 'Sharpness', icon: faSlidersH }
-  ];
+  const location = useLocation()
+  const navigate = useNavigate()
+  const canvasRef = useRef(null);
+  const ctxRef = useRef(null);
+  const originalImage = useRef(null); // Stores original image for resets
+  const [selectedFilter, setSelectedFilter] = useState(null);
+  const [filterValues, setFilterValues] = useState({
+    brightness: 100,
+    contrast: 100,
+    saturation: 100,
+  });
+  const { imageSrc } = location.state || {};
 
-  const [selectedEnhancer, setSelectedEnhancer] = useState(Image_Enhancer[0].title);
+  useEffect(() => {
+    if (!imageSrc) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    ctxRef.current = ctx;
 
-  const handleEnhancerClick = (title) => {
-    setSelectedEnhancer(title); // Set the selected enhancer to the clicked one
+    const image = new Image();
+    image.src = imageSrc;
+    image.onload = () => {
+      canvas.width = image.width;
+      canvas.height = image.height;
+      ctx.drawImage(image, 0, 0);
+      originalImage.current = image; // Save original image
+    };
+  }, [imageSrc]);
+
+  const applyFilters = () => {
+    const canvas = canvasRef.current;
+    const ctx = ctxRef.current;
+    if (!canvas || !ctx || !originalImage.current) return;
+
+    // Clear and reset to original image
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(originalImage.current, 0, 0);
+
+    // Apply filters
+    ctx.filter = `
+      brightness(${filterValues.brightness}%)
+      contrast(${filterValues.contrast}%)
+      saturate(${filterValues.saturation}%)
+    `;
+    ctx.drawImage(originalImage.current, 0, 0);
   };
 
+  useEffect(() => {
+    applyFilters();
+  }, [filterValues]);
+
+  const resetFilters = () => {
+    setFilterValues({
+      brightness: 100,
+      contrast: 100,
+      saturation: 100,
+    });
+  };
+
+  const saveEditedImage = () => {
+    const canvas = canvasRef.current;
+
+    canvas.toBlob((blob) => {
+      const file = new File([blob], "edited-image.png", { type: "image/png" });
+
+      navigate("/newpost", { state: { editedImageFile: file } });
+    }, "image/png");
+    // Navigate back with edited image URL
+
+  };
+
+  const AutoColorImage = () => {
+
+
+    const canvas = canvasRef.current;
+
+    canvas.toBlob((blob) => {
+      const file = new File([blob], "edited-image.png", { type: "image/png" });
+
+      navigate("/newpost", { state: { editedImageFile: file } });
+    }, "image/png");
+
+    const formdata = new FormData()
+    formdata.append("file", file)
+
+    try {
+
+    } catch (e) {
+
+    }
+  }
+
   return (
-    <div className="flex h-screen my-4 mx-5">
-      {/* Image Section */}
-      <img
-        src="https://via.placeholder.com/300x500/8A2BE2/FFFFFF?text=Image"
-        alt="Editable Post"
-        className="w-1/2 h-full object-cover rounded-md"
-      />
-
-      {/* Edit Post Section */}
-      <div className="w-1/2 ml-8 bg-gray-50 shadow-lg rounded-lg p-6 flex flex-col relative">
-        <h2 className="text-xl font-semibold mb-4">Edit Post</h2>
-
-        {/* Scrollable Content */}
-        <div className="overflow-y-auto flex-grow pr-2">
-          <ToggleOptionButton label="Auto Colorization" />
-          <ToggleOptionButton label="Auto Background Blur" />
-
-          <div className="mt-4">
-            <label className="block text-gray-700">{selectedEnhancer}</label>
-            <input type="range" className="w-full mt-2" />
-          </div>
-
-          <div className="mt-4">
-            <h3 className="text-gray-700 font-medium">Image Enhancers</h3>
-            <div className="grid grid-cols-4 gap-4 mt-2">
-              {Image_Enhancer.map((enhancer, key) => (
-                <ImageEnhancerButton
-                  key={key}
-                  label={enhancer.title}
-                  icon={enhancer.icon}
-                  isSelected={selectedEnhancer === enhancer.title}
-                  onClick={() => handleEnhancerClick(enhancer.title)}
-                />
-              ))}
-            </div>
-
-          </div>
-          {/* Fixed Post Button */}
+    <div className="flex flex-col items-center bg-gray-100 p-6 w-full h-screen">
+      {/* Top Slider */}
+      {selectedFilter && (
+        <div className="w-full max-w-2xl mb-4 px-4">
+          <input
+            type="range"
+            min={filterOptions.find((f) => f.key === selectedFilter).min}
+            max={filterOptions.find((f) => f.key === selectedFilter).max}
+            value={filterValues[selectedFilter]}
+            onChange={(e) =>
+              setFilterValues({ ...filterValues, [selectedFilter]: Number(e.target.value) })
+            }
+            className="w-full appearance-none h-2 bg-gray-300 rounded-lg cursor-pointer accent-blue-500"
+          />
         </div>
-        <button className="bg-blue-500 text-white rounded-full py-2 mt-auto">
-          Post
+      )}
+
+      {/* Image Canvas */}
+      <div className="relative flex justify-center items-center w-[500px] h-[500px] bg-white shadow-md border">
+        <canvas ref={canvasRef} className="max-w-full max-h-full"></canvas>
+      </div>
+
+      {/* Filter Selection */}
+      <div className="flex justify-center gap-4 mt-6">
+        {filterOptions.map((filter) => (
+          <button
+            key={filter.key}
+            className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 ${selectedFilter === filter.key
+              ? "bg-blue-500 text-white shadow-md"
+              : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+              }`}
+            onClick={() => setSelectedFilter(filter.key)}
+          >
+            {filter.name}
+          </button>
+        ))}
+        <button className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200`} onClick={() => }></button>
+      </div>
+
+      <div className="flex gap-4 mt-6">
+        <button onClick={resetFilters} className="px-4 py-2 bg-gray-500 text-white rounded-md">
+          Reset
         </button>
-
-
-
+        <button onClick={saveEditedImage} className="px-4 py-2 bg-blue-500 text-white rounded-md">
+          Save
+        </button>
       </div>
     </div>
   );

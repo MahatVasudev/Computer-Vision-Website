@@ -15,14 +15,12 @@ const Register = () => {
   const [email, setEmail] = useState("")
   const [availableMessage, setAvailableMessage] = useState({})
   const [otp, setOTP] = useState()
-  const [sentSubmit, setSentSubmit] = useState(false)
   const [step, setStep] = useState(0)
   const [sendEmail, { }] = useSendEmailMutation()
   const [sendVerifyOTP, { }] = useVerifyOTPMutation()
   const [createUser, { }] = useRegisterMutation()
   const [additional_message, setAdditionalMessage] = useState()
   const navigate = useNavigate()
-  const dispatch = useDispatch()
 
   useEffect(() => {
 
@@ -131,9 +129,10 @@ const Register = () => {
       return
     }
 
-    const username = udata.data.data.username
-    // navigate to profile page
-    navigate(`/u/${username}`)
+    navigate('/setup')
+    //const username = udata.data.data.username
+    //// navigate to profile page
+    //navigate(`/u/${username}`)
   }
 
 
@@ -144,7 +143,7 @@ const Register = () => {
 
   return (
 
-    < div className="relative h-screen w-full flex lg:flex-row flex-col-reverse overflow-scroll" >
+    < div className="relative h-screen w-full flex lg:flex-row flex-col-reverse " >
 
       {step === 2 ? (
         <>
@@ -160,7 +159,7 @@ const Register = () => {
         />
       </div >
       {/* Register Form Section */}
-      < div className="w-full lg:w-1/2 overflow-scroll flex items-center justify-center bg-gray-50 lg:bg-transparent relative z-10 lg:z-auto" >
+      < div className="w-full lg:w-1/2  flex items-center justify-center bg-gray-50 lg:bg-transparent relative z-10 lg:z-auto" >
         <div className="bg-white p-8 lg:p-12 rounded-lg shadow-lg w-full max-w-lg lg:mt-[-4rem] mt-6 md:mt-10"> {/* Adjusted margin-top here */}
           <h2 className="text-4xl font-bold text-center mb-4">Register</h2>
           <p className="text-center text-gray-500 mb-6">Create your account...</p>

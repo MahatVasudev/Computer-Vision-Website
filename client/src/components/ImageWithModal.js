@@ -15,7 +15,7 @@ const ImageWithModal = ({ imageUrl }) => {
   console.log("Image Url", imageUrl)
   return (
     <>
-      <div className="w-2/3 bg-black h-fit py-5 shadow-lg rounded-lg flex justify-center items-center">
+      <div className="w-fit mx-auto bg-transparent h-fit py-5 shadow-lg rounded-lg flex justify-center items-center">
         <img
           src={imageUrl}
           alt="Post"

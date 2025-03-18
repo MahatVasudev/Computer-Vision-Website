@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const localSettings = createSlice({
   name: "settings",
   initialState: {
-    theme: "light",
+    dark: 0,
+    prefered_color: "#000000"
   },
   reducers: {
     setSettings: (state, action) => {
@@ -20,11 +21,14 @@ const localSettings = createSlice({
       const { key } = action.payload
 
       delete state[key]
+    },
+    toggleThemes: (state, action) => {
+      state.dark = state.dark === 1 ? 0 : 1
     }
   }
 
 })
 
-export const { setSettings } = localSettings.actions
+export const { setSettings, toggleThemes } = localSettings.actions
 
 export default localSettings.reducer

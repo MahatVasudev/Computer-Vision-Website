@@ -3,28 +3,82 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 10px;
+  /* Width of the scrollbar */
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+  /* Transparent track */
+}
+
+/* Thumb */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  /* Color of the scrollbar thumb */
+  border-radius: 5px;
+  /* Rounded corners */
+  border: 2px solid transparent;
+  /* Transparent border */
+  background-clip: content-box;
+  /* Ensures the background color doesn't cover the border */
+}
+
+/* Thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+  /* Darker color on hover */
+}
+
 
 .my-masonry-grid {
   display: flex;
-  margin-left: -30px; /* Adjust as needed */
+  margin-left: -30px;
+  /* Adjust as needed */
   width: auto;
 }
 
+
+/* Custom scrollbar class */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
 .my-masonry-grid_column {
-  padding-left: 30px; /* Adjust as needed */
+  padding-left: 30px;
+  /* Adjust as needed */
   background-clip: padding-box;
 }
 
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
- }
+}
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
 }
-
-
-

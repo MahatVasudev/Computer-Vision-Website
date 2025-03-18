@@ -1,6 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
-const local = "http://localhost:5000"
+export const local = "http://localhost:5000"
+
+export const local_public = local + "/public"
+
+export const local_post = local_public + "/posts"
+
 
 const baseQueryUser = fetchBaseQuery({
   baseUrl: local + "/user",
@@ -8,7 +13,13 @@ const baseQueryUser = fetchBaseQuery({
 })
 
 const baseQueryPost = fetchBaseQuery({
-  baseUrl: local + "/post"
+  baseUrl: local + "/posts",
+  credentials: 'include'
+})
+
+const baseQueryFollow = fetchBaseQuery({
+  baseUrl: local + "/follow",
+  credentials: 'include'
 })
 
 const ApiUser = createApi({
@@ -23,4 +34,11 @@ const ApiPost = createApi({
   endpoints: () => ({})
 })
 
-export { ApiUser, ApiPost }
+
+const ApiFollow = createApi({
+  reducerPath: "follow_api",
+  baseQuery: baseQueryFollow,
+  endpoints: () => ({})
+})
+
+export { ApiUser, ApiPost, ApiFollow }

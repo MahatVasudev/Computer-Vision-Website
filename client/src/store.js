@@ -2,10 +2,11 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistStore } from "redux-persist";
 import persistReducer from "redux-persist/es/persistReducer";
 import storage from "redux-persist/lib/storage";
-import { ApiPost, ApiUser } from "./api/newapi";
+import { ApiFollow, ApiPost, ApiUser } from "./api/newapi";
 import settingsLocal from "./features/settings/settings.local";
 import authLocal from "./features/user/auth.local";
 import authMiddleware from "./middlewares/auth.middleware";
+import image_slice from "./features/images/images"
 
 const persistConfig = {
   key: "root",
@@ -17,8 +18,10 @@ const persistConfig = {
 const reducers = combineReducers({
   "auth": authLocal,
   "settings": settingsLocal,
+  "images": image_slice,
   [ApiUser.reducerPath]: ApiUser.reducer,
-  [ApiPost.reducerPath]: ApiPost.reducer
+  [ApiPost.reducerPath]: ApiPost.reducer,
+  [ApiFollow.reducerPath]: ApiFollow.reducer
 })
 
 const persistedReducer = persistReducer(persistConfig, reducers)
@@ -29,7 +32,7 @@ const store = configureStore({
     serializableCheck: {
       ignoreActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
     }
-  }).concat([ApiUser.middleware, ApiPost.middleware, authMiddleware])
+  }).concat(ApiUser.middleware, ApiPost.middleware, ApiFollow.middleware, authMiddleware)
 })
 
 
